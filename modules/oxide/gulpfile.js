@@ -99,6 +99,17 @@ gulp.task('minifyCss', function() {
 });
 
 //
+// Copy icon font used by the mobile skin to each skin folder in /build
+//
+gulp.task('copyFonts', function() {
+  let base = './build/skins/ui';
+
+  return fs.readdirSync(base).reduce((stream, skin) => {
+    return stream.pipe(gulp.dest(base + '/' + skin + '/fonts/'));
+  }, gulp.src('./src/fonts/**'));
+});
+
+//
 // watch and rebuild CSS for Oxide demos
 //
 gulp.task('monitor', function (done) {
@@ -128,7 +139,7 @@ gulp.task('clean', function () {
 // Build project and watch LESS file changes
 //
 gulp.task('css', gulp.series('lint', 'less', 'minifyCss'));
-gulp.task('build', gulp.series('clean', 'css'));
+gulp.task('build', gulp.series('clean', 'css', 'copyFonts'));
 gulp.task('default', gulp.series('build'));
 
 gulp.task('demo-build', gulp.series('css', 'less', 'minifyCss', 'buildDemos', 'buildSkinSwitcher'));
