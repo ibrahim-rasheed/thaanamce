@@ -108,6 +108,16 @@ gulp.task('copyFonts', function() {
     return stream.pipe(gulp.dest(base + '/' + skin + '/fonts/'));
   }, gulp.src('./src/fonts/**'));
 });
+//
+// Copy icon font used by the mobile skin to each skin folder in /build
+//
+gulp.task('copyFonts', function() {
+  let base = './build/skins/content';
+
+  return fs.readdirSync(base).reduce((stream, skin) => {
+    return stream.pipe(gulp.dest(base + '/' + skin + '/fonts/'));
+  }, gulp.src('./src/fonts/**'));
+});
 
 //
 // watch and rebuild CSS for Oxide demos
