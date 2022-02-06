@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <style>
+      /* .tox-editor-header,
+      .tox-mbtn--select {
+        direction: rtl !important;
+      } */
+      .tox-tinymce {
+        min-height: 100% !important;
+      }
+      /* @font-face {
+        font-family: maaharaa;
+        src: url(MVMaaharaa.woff2);
+      }
+      body,
+      .body > form > div {
+        font-family: maaharaa !important;
+      } */
+    </style>
+
+    <script src="js/tinymce/tinymce.js" referrerpolicy="origin"></script>
+
+    <script>
+      var spellcheckTimeout;
+      function triggerSpellcheck() {
+        clearTimeout(spellcheckTimeout);
+        spellcheckTimeout = setTimeout(function () {
+          tinymce.activeEditor.execCommand("mceSpellCheck");
+        }, 1000);
+      }
+
+      tinymce.init({
+        selector: "textarea#format-custom",
+        branding: false,
+        content_css: "document",
+        height: 500,
+        plugins: "table wordcount directionality spellchecker code",
+        skin: "skin-ui-dhivehi",
+        directionality: "rtl",
+        language: "dv",
+        toolbar:
+          "undo redo styleselect bold italic alignleft aligncenter alignright alignjustify | bullist numlist outdent indent rtl ltr spellchecker code",
+        spellchecker_callback: function (method, text, success, failure) {
+          var words = text.match(this.getWordCharPattern());
+          if (method === "spellcheck") {
+            var suggestions = {};
+            for (var i = 0; i < words.length; i++) {
+              //suggestions[words[i]] = ["First", "Second"];
+            }
+            suggestions["luv"] = ["Loabi", "Lobs"];
+            success({ words: suggestions, dictionary: [] });
+          } else if (method === "addToDictionary") {
+            // Add word to dictionary here
+            success();
+          }
+        },
+        setup: function (editor) {
+          editor.on("keyup", function (e) {
+            if (e.keyCode == 32) {
+              console.log("test");
+              triggerSpellcheck();
+            }
+          });
+        },
+        spellchecker_languages: "Divehi=dv,English=en",
+        // spellchecker_rpc_url: "spell-checker-response.json",
+        content_style:
+          ".left { text-align: left; } " +
+          "img.left { float: left; } " +
+          "table.left { float: left; } " +
+          ".right { text-align: right; } " +
+          "img.right { float: right; } " +
+          "table.right { float: right; } " +
+          ".center { text-align: center; } " +
+          "img.center { display: block; margin: 0 auto; } " +
+          "table.center { display: block; margin: 0 auto; } " +
+          ".full { text-align: justify; } " +
+          "img.full { display: block; margin: 0 auto; } " +
+          "table.full { display: block; margin: 0 auto; } " +
+          ".bold { font-weight: bold; } " +
+          ".italic { font-style: italic; } " +
+          ".underline { text-decoration: underline; } " +
+          ".example1 {} " +
+          "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }" +
+          ".tablerow1 { background-color: #D3D3D3; }",
+        formats: {
+          alignleft: {
+            selector:
+              "p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img,audio,video",
+            classes: "left",
+          },
+          aligncenter: {
+            selector:
+              "p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img,audio,video",
+            classes: "center",
+          },
+          alignright: {
+            selector:
+              "p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img,audio,video",
+            classes: "right",
+          },
+          alignfull: {
+            selector:
+              "p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img,audio,video",
+            classes: "full",
+          },
+          bold: { inline: "span", classes: "bold" },
+          italic: { inline: "span", classes: "italic" },
+          underline: { inline: "span", classes: "underline", exact: true },
+          strikethrough: { inline: "del" },
+          customformat: {
+            inline: "span",
+            styles: { color: "#00ff00", fontSize: "20px" },
+            attributes: { title: "My custom format" },
+            classes: "example1",
+          },
+        },
+        style_formats: [
+          { title: "Custom format", format: "customformat" },
+          { title: "Align left", format: "alignleft" },
+          { title: "Align center", format: "aligncenter" },
+          { title: "Align right", format: "alignright" },
+          { title: "Align full", format: "alignfull" },
+          { title: "Bold text", inline: "strong" },
+          { title: "Red text", inline: "span", styles: { color: "#ff0000" } },
+          { title: "Red header", block: "h1", styles: { color: "#ff0000" } },
+          {
+            title: "Badge",
+            inline: "span",
+            styles: {
+              display: "inline-block",
+              border: "1px solid #2276d2",
+              "border-radius": "5px",
+              padding: "2px 5px",
+              margin: "0 2px",
+              color: "#2276d2",
+            },
+          },
+          { title: "Table row 1", selector: "tr", classes: "tablerow1" },
+          { title: "Image formats" },
+          {
+            title: "Image Left",
+            selector: "img",
+            styles: { float: "left", margin: "0 10px 0 10px" },
+          },
+          {
+            title: "Image Right",
+            selector: "img",
+            styles: { float: "right", margin: "0 0 10px 10px" },
+          },
+        ],
+      });
+    </script>
+  </head>
+
+  <body>
+    <h1>TinyMCE Quick Start Guide</h1>
+    <form method="post">
+      <textarea id="format-custom">
+        <h1>ގާނޫނު އަސާސީގެ ފުރަތަމަ ސަފުހާ</h1>
+      <p>އެއް ދުވަހެއްގެ ޖަލްސާގައި، ޤާނޫނު އަސާސީގެ ފުރަތަމަ ޞަފުހާގައި ލިޔާނޭ ލިޔުމަކާ މެދު ކުރެވުނު ވަރަށް ވަރުގަދަ ބަހުޘް އެއް އަޅުގަނޑު ހަނދާން އެބަހުއްޓެވެ… އެކި ބޭފުޅުންނަށް ފެނިވަޑައިގަންނަވާ އެކި ޢިބާރާތްތައް މޭޒު މައްޗަށް ހުށަހެޅެމުން ދެއެވެ. އަލްފާޟިލް ޙުސައިން ޙިލްމީ ދީދީގެ ދައުރު އަތުވެއްޖެއެވެ. އޭނާއަށް ފެނިވަޑައިގަތީ ރައިވަރަކުން ނިންމާލުމަށެވެ. ބައެއް މެންބަރުން ދިޔައީ ”އައްޑިހަޔަށް އަރައިގެންނޭ“ ދެންނެވުމުން، އެއީ އެ މެމްބަރުންނަށް ރައްދުކުރެވުނު އިހާނަތްތެރި ބަހެއްކަމުގައި ހިމެނޭނޭ ބާވައެވެ؟   ޙުސައިން ޙިލްމީ ދީދީ ހުށަހެޅުއްވި ރައިވަރަކީ – ”ބޭހާއި ނުކުޅޭތި ބަޑި، ނޭގި ހުއްޓާ އަދާދާނެ، ގޭމަ ކޮޔާ ފިހިދާނެ“</p>
+      <h1>The Incomparable Yosemite</h1>
+      <p>The most famous and accessible of these ca&ntilde;on valleys,&nbsp;and also the one that presents their most striking and sublime features on the grandest scale, is the <a title="Link to Wikipedia about Yosemite national park" href="https://en.wikipedia.org/wiki/Yosemite_National_Park">Yosemite</a>, situated in the basin of the <span style="color: #9b59b6;">Merced River at an elevation of 4000 feet above the level of the sea</span>. It is about&nbsp;<span style="background-color: #fffcc7;">seven miles long, half a mile to a mile wide, and nearly a mile deep</span> in the&nbsp;solid granite flank&nbsp;of the range.&nbsp;</p>
+      <blockquote>
+      <p>Down through the middle of the Valley flows the crystal Merced, <span style="text-decoration: line-through;">River of Mercy</span>, peacefully quiet, reflecting lilies and trees and the onlooking rocks;</p>
+      </blockquote>
+      <p>The walls are made up of rocks, mountains in size, partly separated from each other by side ca&ntilde;ons, and they are so sheer in front, and so compactly and harmoniously arranged on a level floor, that the Valley, comprehensively seen, <strong>looks like an immense hall or temple lighted from above</strong>.</p>
+      <p>Awful in stern, immovable majesty, how softly these rocks are adorned, and how fine and reassuring the company they keep: their feet among beautiful groves and meadows, their brows in the sky, a thousand flowers leaning confidingly against their feet, bathed in floods of water, floods of light, while the snow and waterfalls, the winds and avalanches and clouds shine and sing and wreathe about them as the years go by, and myriads of small winged creatures</p>
+      <ul>
+      <li>birds</li>
+      <li>bees</li>
+      <li>butterflies</li>
+      </ul>
+      <p>give glad animation and help to make all the air into music. Down through the middle of the Valley flows the crystal Merced, River of Mercy, peacefully quiet, reflecting lilies and trees and the onlooking rocks</p>
+    
+      </textarea>
+    </form>
+  </body>
+</html>
